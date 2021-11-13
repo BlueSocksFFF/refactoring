@@ -8,6 +8,7 @@ description:
 
 import turtle
 
+# TODO: A big class: connect-4
 
 def make_window(window_title, bgcolor, width, height):
 	''' this function creates a screen object and returns it '''
@@ -19,7 +20,7 @@ def make_window(window_title, bgcolor, width, height):
 	window.tracer(0) #turns off screen updates for the window Speeds up the game
 	return window
 
-
+# TODO: interject reference?
 def make_turtle(shape, color, stretch_width, stretch_length, x_pos, y_pos):
     ''' creates a turtle and sets initial position '''
 
@@ -40,6 +41,7 @@ def draw_grid(grid, turt, x_pos, y_pos, tile_size):
     turt.goto(x_pos, y_pos)
     turt.down()
 
+    # TODO: for loop
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             

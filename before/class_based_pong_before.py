@@ -69,6 +69,7 @@ class Ball:
         self.x_position = self.turt.xcor()
         self.y_position = self.turt.ycor()
 
+        # TODO: SRP, draw out method
         # Top and bottom
         if self.turt.ycor() > 290:
             self.turt.sety(290)
@@ -88,6 +89,7 @@ class Ball:
         ''' returns turtle y_cord '''
         return self.turt.ycor()
 
+    # TODO: what's the difference between goto and set?
 
     def goto(self, x_pos, y_pos):
         ''' moves ball to new x, y positions '''
@@ -102,7 +104,7 @@ class Ball:
         self.x_position = x_cor
 
 
-
+# TODO: Methods outside of class: A bigger class named PongGame
 def make_window(window_title, bgcolor, width, height):
     '''this function creates a screen object and returns it'''
 
@@ -117,6 +119,7 @@ def make_window(window_title, bgcolor, width, height):
 def make_turtle(shape, color, stretch_width, stretch_length, x_pos, y_pos):
     ''' creates a turtle and sets initial position '''
 
+    # TODO: reference instead of creating new?
     turt = turtle.Turtle()
     turt.speed(0) # Speed of animation, 0 is max
     turt.shape(shape) # square defualt is 20,20
@@ -131,6 +134,8 @@ def main():
     ''' the main function where the game events take place '''
 
     window = make_window("Pong - A CS151 Reproduction!", "black", 800, 600)
+    
+    #TODO: Combine paddle and keyboard settings to a method
 
     # Score
     score_player1 = 0
@@ -160,6 +165,8 @@ def main():
         window.update() #This is the update to offset the wn.tracer(0)
 
         ball.move()
+        
+        # TODO: Repeated code
 
         # Border checking    
         # Left and right
