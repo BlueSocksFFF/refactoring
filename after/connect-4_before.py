@@ -148,6 +148,17 @@ class Connect4:
             self.turn = 2
         else:
             self.turn = 1
+            
+    def update_grid(self, selected_row, selected_col):
+        if self.grid[selected_row][selected_col] == 0:
+    
+            if self.turn == 1:
+                self.grid[selected_row][selected_col] = 1
+            else:
+                self.grid[selected_row][selected_col] = 2
+        
+        self.draw_grid()
+        self.window.update()
 
 def main():
     ''' the main function where the game events take place '''
@@ -165,15 +176,9 @@ def main():
         selected_row = int(input("enter row, player "+ str(turn) +": "))
         selected_col = int(input("enter col, player "+ str(turn) +": "))
 
-        if grid[selected_row][selected_col] == 0:
+        connect4_game.update_grid()
 
-            if turn == 1:
-                grid[selected_row][selected_col] = 1
-            else:
-                grid[selected_row][selected_col] = 2
-
-        draw_grid(grid, my_turtle, -150, 200, 50)
-        window.update()
+        
 
         if check_win(grid, 1):
             print("player 1 won")
