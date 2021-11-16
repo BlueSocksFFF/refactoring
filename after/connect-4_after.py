@@ -44,7 +44,9 @@ class Connect4:
         turt.penup()
         turt.goto(x_pos, y_pos) # Start position
         return turt
-
+    
+    def get_turn(self):
+        return self.turn
 
     def draw_grid(self):
         ''' draws a grid at x, y with a specific tile_size '''
@@ -70,6 +72,20 @@ class Connect4:
         
         else:
             self.turtle.dot(self.tile_size-5, "white")
+            
+    def give_win(self):
+        if self.check_win(1):
+            print("player 1 won")
+
+        elif self.check_win(2):
+            print("player 2 won")
+            
+            
+    def switch_turn(self):
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
 
 
     def check_win(self, player):
@@ -135,19 +151,11 @@ class Connect4:
         col = int(abs((x_pos - self.x_offset - 25) // (50) + 1))
         print(row, col)
         self.grid[row][col] = self.turn
-        self.draw_grid(self.grid, self.turtle, self.x_offset, self.y_offset, self.tile_size)
+        self.draw_grid()
         self.window.update()
 
-        if self.check_win(self.grid, 1):
-            print("player 1 won")
-
-        elif self.check_win(self.grid, 2):
-            print("player 2 won")
-
-        if self.turn == 1:
-            self.turn = 2
-        else:
-            self.turn = 1
+        self.give_win()
+        self.switch_turn()
             
     def update_grid(self, selected_row, selected_col):
         if self.grid[selected_row][selected_col] == 0:
@@ -173,23 +181,14 @@ def main():
         # grid[3][2] = 1
         # grid[4][3] = 1
 
-        selected_row = int(input("enter row, player "+ str(turn) +": "))
-        selected_col = int(input("enter col, player "+ str(turn) +": "))
+        selected_row = int(input("enter row, player "+ str(connect4_game.get_turn()) +": "))
+        selected_col = int(input("enter col, player "+ str(connect4_game.get_turn()) +": "))
 
-        connect4_game.update_grid()
+        connect4_game.update_grid(selected_row, selected_col)
 
+        connect4_game.give_win()
         
-
-        if check_win(grid, 1):
-            print("player 1 won")
-
-        elif check_win(grid, 2):
-            print("player 2 won")
-
-        if turn == 1:
-            turn = 2
-        else:
-            turn = 1
+        connect4_game.switch_turn()
 
 
     # window.exitonclick()
