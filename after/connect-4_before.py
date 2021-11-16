@@ -79,35 +79,22 @@ class Connect4:
         '''
         
         # check rows
-        rol_win = self.check_win_rols(player)
-        if rol_win:
+        row_win = self.check_win_rows(player)
+        if row_win:
             return True
-                
-
+        
         # check columns
-        for col in range(len(grid[0])):
-            count = 0
-            for row in range(len(grid)):
-                if grid[row][col] == player:
-                    count += 1
-                    
-                    if count == 4:
-                        return True
-                else:
-                    count = 0
+        col_win = self.check_win_cols(player)
+        if col_win:
+            return True
 
         # check diagonal
-        for row in range(len(grid)):
-            for col in range(len(grid[0])):
-
-                if row + 3 < len(grid) and col + 3 < len(grid[row]):
-                    if grid[row][col] == 1\
-                    and grid[row+1][col+1] == 1\
-                    and grid[row+2][col+2] == 1\
-                    and grid[row+3][col+3] == 1:
-                        return True 
+        diag_win = self.check_win_diagonal(player)
+        if diag_win:
+            return True
+        
                     
-    def check_win_rols(self, player):
+    def check_win_rows(self, player):
         for row in range(len(self.grid)):
             count = 0
             for col in range(len(self.grid[0])):
@@ -128,8 +115,19 @@ class Connect4:
                     
                     if count == 4:
                         return True
-                else:
-                    count = 0
+        return False
+    
+    def check_win_diagonal(self, player):
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[0])):
+
+                if row + 3 < len(self.grid) and col + 3 < len(self.grid[row]):
+                    if self.grid[row][col] == 1\
+                    and self.grid[row+1][col+1] == 1\
+                    and self.grid[row+2][col+2] == 1\
+                    and self.grid[row+3][col+3] == 1:
+                        return True
+        return False
 
     def play(self, x_pos, y_pos):
         ''' '''
