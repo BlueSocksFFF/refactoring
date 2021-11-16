@@ -20,7 +20,8 @@ class Connect4:
         self.y_offset = 200
         self.tile_size = 50
         self.turn = 1
-
+        self.window.onscreenclick(self.play)
+        self.window.listen()
 
     def make_window(self, window_title, bgcolor, width, height):
         ''' this function creates a screen object and returns it '''
@@ -32,7 +33,6 @@ class Connect4:
         window.tracer(0) #turns off screen updates for the window Speeds up the game
         return window
 
-    # TODO: interject reference?
     def make_turtle(self, shape, color, stretch_width, stretch_length, x_pos, y_pos):
         ''' creates a turtle and sets initial position '''
 
@@ -46,50 +46,42 @@ class Connect4:
         return turt
 
 
-    def draw_grid(grid, turt, x_pos, y_pos, tile_size):
+    def draw_grid(self):
         ''' draws a grid at x, y with a specific tile_size '''
 
-        turt.up()
-        turt.goto(x_pos, y_pos)
-        turt.down()
+        self.turtle.up()
+        self.turtle.goto(self.x_offset, self.y_offset)
+        self.turtle.down()
 
-        # TODO: for loop
-        for row in range(len(grid)):
-            for col in range(len(grid[row])):
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[row])):
                 
-                turt.up()
-                turt.goto(x_pos + col * tile_size, y_pos -row * tile_size)
-                turt.down()
+                self.turtle.up()
+                self.turtle.goto(self.x_offset + col * self.tile_size, self.y_offset -row * self.tile_size)
+                self.turtle.down()
+                self.draw_each_cell(row, col)
 
-                if grid[row][col] == 1:
-                    turt.dot(tile_size-5, "red")
+    def draw_each_cell(self, row, col):
+        if self.grid[row][col] == 1:
+            self.turtle.dot(self.tile_size-5, "red")
                 
-                elif grid[row][col] == 2:
-                    turt.dot(tile_size-5, "yellow")
-                
-                else:
-                    turt.dot(tile_size-5, "white")
+        elif self.grid[row][col] == 2:
+            self.turtle.dot(self.tile_size-5, "yellow")
+        
+        else:
+            self.turtle.dot(self.tile_size-5, "white")
 
 
-    def check_win(grid, player):
+    def check_win(self, player):
         ''' checks the winner in the grid
         returns true if player won
         returns false if player lost
         '''
-
-        count = 0
-
+        
         # check rows
-        for row in range(len(grid)):
-            count = 0
-            for col in range(len(grid[0])):
-                if grid[row][col] == player:
-                    count += 1
-
-                    if count == 4:
-                        return True
-                else:
-                    count = 0
+        rol_win = self.check_win_rols(player)
+        if rol_win:
+            return True
                 
 
         # check columns
@@ -113,16 +105,76 @@ class Connect4:
                     and grid[row+1][col+1] == 1\
                     and grid[row+2][col+2] == 1\
                     and grid[row+3][col+3] == 1:
-                    return True 
+                        return True 
+                    
+    def check_win_rols(self, player):
+        for row in range(len(self.grid)):
+            count = 0
+            for col in range(len(self.grid[0])):
+                if self.grid[row][col] == player:
+                    count += 1
 
-    def play(x_pos, y_pos):
+                    if count == 4:
+                        return True
+        return False
+    
+    
+    def check_win_cols(self, player):
+        for col in range(len(self.grid[0])):
+            count = 0
+            for row in range(len(self.grid)):
+                if self.grid[row][col] == player:
+                    count += 1
+                    
+                    if count == 4:
+                        return True
+                else:
+                    count = 0
+
+    def play(self, x_pos, y_pos):
         ''' '''
-        global turn
-        row = int(abs((y_pos - y_offset - 25) // (50) + 1))
-        col = int(abs((x_pos - x_offset - 25) // (50) + 1))
+        row = int(abs((y_pos - self.y_offset - 25) // (50) + 1))
+        col = int(abs((x_pos - self.x_offset - 25) // (50) + 1))
         print(row, col)
-        grid[row][col] = turn
-        draw_grid(grid, my_turtle, x_offset, y_offset, tile_size)
+        self.grid[row][col] = self.turn
+        self.draw_grid(self.grid, self.turtle, self.x_offset, self.y_offset, self.tile_size)
+        self.window.update()
+
+        if self.check_win(self.grid, 1):
+            print("player 1 won")
+
+        elif self.check_win(self.grid, 2):
+            print("player 2 won")
+
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
+
+def main():
+    ''' the main function where the game events take place '''
+    
+    connect4_game = Connect4()
+    connect4_game.draw_grid()
+
+    while True:
+
+        # grid[1][0] = 1
+        # grid[2][1] = 1
+        # grid[3][2] = 1
+        # grid[4][3] = 1
+
+        selected_row = int(input("enter row, player "+ str(turn) +": "))
+        selected_col = int(input("enter col, player "+ str(turn) +": "))
+
+        if grid[selected_row][selected_col] == 0:
+
+            if turn == 1:
+                grid[selected_row][selected_col] = 1
+            else:
+                grid[selected_row][selected_col] = 2
+
+        draw_grid(grid, my_turtle, -150, 200, 50)
         window.update()
 
         if check_win(grid, 1):
@@ -137,49 +189,7 @@ class Connect4:
             turn = 1
 
 
-    window.onscreenclick(play)
-    window.listen()
-
-    def main():
-        ''' the main function where the game events take place '''
-
-        global turn
-
-        draw_grid(grid, my_turtle, x_offset, y_offset, tile_size)
-
-        while True:
-
-            # grid[1][0] = 1
-            # grid[2][1] = 1
-            # grid[3][2] = 1
-            # grid[4][3] = 1
-
-            selected_row = int(input("enter row, player "+ str(turn) +": "))
-            selected_col = int(input("enter col, player "+ str(turn) +": "))
-
-            if grid[selected_row][selected_col] == 0:
-
-                if turn == 1:
-                    grid[selected_row][selected_col] = 1
-                else:
-                    grid[selected_row][selected_col] = 2
-
-            draw_grid(grid, my_turtle, -150, 200, 50)
-            window.update()
-
-            if check_win(grid, 1):
-                print("player 1 won")
-
-            elif check_win(grid, 2):
-                print("player 2 won")
-
-            if turn == 1:
-                turn = 2
-            else:
-                turn = 1
-
-
-        # window.exitonclick()
+    # window.exitonclick()
 
 if __name__ == "__main__":
 	main()
