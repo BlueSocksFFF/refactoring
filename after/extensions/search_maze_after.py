@@ -6,15 +6,6 @@ from multiprocessing import Process
 
 class Search_maze:
     
-    color_dict = {
-        'X': ('grey', "black"),
-        'S': ('grey', "yellow"),
-        'E': ('grey', "red"),
-        'P': ('grey', "royalblue"),
-        'T': ('grey', "light blue"),
-        'D': ('gainsboro', "gray")
-    }
-    
     def __init__(self):
         self.turtle = turtle.Turtle()
         self.window = turtle.getscreen()
@@ -33,6 +24,15 @@ class Search_maze:
         
         self.grid = None
         
+        self.color_dict = {
+            'X': ('grey', "black"),
+            'S': ('grey', "yellow"),
+            'E': ('grey', "red"),
+            'P': ('grey', "royalblue"),
+            'T': ('grey', "light blue"),
+            'D': ('gainsboro', "gray"),
+        }
+        
 
     def draw_grid(self):
         ''' draws a grid at x_pos, y_pos with a specific tile_size '''
@@ -50,58 +50,25 @@ class Search_maze:
             for col in range(len(self.grid[row])):
                 
                 # move turtle to the position of the cell in the grid
-                self.turtle.up()
-                self.turtle.goto(self.x_offset + col * self.tile_size, self.y_offset -row * self.tile_size)
-                self.turtle.down()
+                self.change_turtle_location(row, col)
 
-                # if the cell is an obstacle (X) draw a black dot
-                if self.grid[row][col] == 'X':
-                    #self.turtle.dot(tile_size-5, "Black")
-                    self.turtle.color('grey', "black")
-                    self.turtle.stamp()
-                
-                # if the cell is the start drawing position (S) draw a yellow dot
-                elif self.grid[row][col] == 'S':
-                    #self.turtle.dot(tile_size-5, "yellow")
-                    self.turtle.color('grey', "yellow")
-                    self.turtle.stamp()
-                
-                # if the cell is the End position (E) draw a Red dot
-                elif self.grid[row][col] == 'E':
-                    #self.turtle.dot(tile_size-5, "red")
-                    self.turtle.color('grey', "red")
-                    self.turtle.stamp()
-
-                # if the cell is part of a path (P) draw a royalblue dot
-                elif self.grid[row][col] == 'P':
-                    #self.turtle.dot(tile_size-5, "royalblue")
-                    self.turtle.color('grey', "royalblue")
-                    self.turtle.stamp()
-
-                # if the cell has been tried before (T) draw a light blue dot
-                elif self.grid[row][col] == 'T':
-                    #self.turtle.dot(tile_size-5, "light blue")
-                    self.turtle.color('grey', "light blue")
-                    self.turtle.stamp()
-
-                # if the cell is part of a deadend (D) draw a gray dot
-                elif self.grid[row][col] == 'D':
-                    #self.turtle.dot(tile_size-5, "gray")
-                    self.turtle.color('gainsboro', "gray")
-                    self.turtle.stamp()
-                
-                # else draw a white dot
-                else:
-                    #self.turtle.dot(tile_size-5, "white")
-                    self.turtle.color( 'grey', "white")
-                    self.turtle.stamp()
+                self.change_turtle_color(self.grid[row][col])
         
         # turn tracer back on
         self.window.tracer(True)
         
-    # Helper method
-    def draw_each_cell(self, row, col):
+    # Helper methods
+    def change_turtle_color(self, type):
+        try:
+            self.turtle.color(self.color_dict[type][0], self.color_dict[type][1])
+        except KeyError:
+            self.turtle.color( 'grey', "white")
+        self.turtle.stamp()
         
+    def change_turtle_location(self, row, col):
+        self.turtle.up()
+        self.turtle.goto(self.x_offset + col * self.tile_size, self.y_offset -row * self.tile_size)
+        self.turtle.down()
 
 
     def find_start(self):
